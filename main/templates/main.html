@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>URLS</title>
+
+    <style>
+        .container {
+            width: 50%;
+            height: 300px;
+        }
+        .container textarea {
+            resize: none;
+            width:100%;
+            height:100%;
+            box-sizing: border-box;         /* For IE and modern versions of Chrome */
+            -moz-box-sizing: border-box;    /* For Firefox                          */
+            -webkit-box-sizing: border-box; /* For Safari                           */
+        }
+    </style>
+
+</head>
+<body>
+<div class="container" style="float: left">
+    <textarea id="text_area_1" readonly></textarea>
+</div>
+<div class="container" style="float: right">
+    <textarea id="text_area_2" readonly></textarea>
+</div>
+
+<script>
+  var wsUri = "ws://localhost:5600/",
+      output, websocket,
+      textarea = document.getElementById("text_area_1"),
+      textarea_2 = document.getElementById("text_area_2");;
+  textarea.value = "";
+  textarea_2.value = "";
+  websocket = new WebSocket(wsUri);
+  websocket.onopen = function(evt) { onOpen(evt) };
+  websocket.onclose = function(evt) { onClose(evt) };
+  websocket.onmessage = function(evt) { onMessage(evt) };
+  websocket.onerror = function(evt) { onError(evt) };
+
+  function onOpen(evt)
+  {
+      console.log("CONNECTED");
+  }
+
+  function onClose(evt)
+  {
+      console.log("DISCONNECTED");
+  }
+
+  function onMessage(evt)
+  {
+    console.log(evt);
+      var message = evt.data.split('$PAYLOAD$');
+      if (message[0] === '1'){
+          textarea.value += "\n" + message[1];
+      } else {
+          textarea_2.value += "\n" + message[1];
+      }
+  }
+
+  function onError(evt)
+  {
+      console.log("ERROR");
+  }
+</script>
+</body>
+</html>
