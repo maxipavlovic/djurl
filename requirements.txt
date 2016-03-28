@@ -1,0 +1,4 @@
+Django>=1.8
+hendrix>=2.0.2
+txws>=0.9.1
+beautifulsoup4>=4.4.0
